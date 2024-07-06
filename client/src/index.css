@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.googleTranslate{
+    display: flex;
+    padding: 2px;
+    justify-content:end;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: sans-serif;
+    color: rgb(80, 80, 80);
+    background-color:#E9F1FA;
+}
+
+.goog-logo-link {
+    display:none !important;
+    font-size:0px !important;
+} 
+    
+.goog-te-gadget{
+    color: blue !important;
+    font-size:0px !important;
+}
+
+.VIpgJd-ZVi9od-l4eHX-hSRGPd, .VIpgJd-ZVi9od-l4eHX-hSRGPd:link, .VIpgJd-ZVi9od-l4eHX-hSRGPd:visited, .VIpgJd-ZVi9od-l4eHX-hSRGPd:hover, .VIpgJd-ZVi9od-l4eHX-hSRGPd:active {
+    display: none;
+}
