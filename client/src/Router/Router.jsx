@@ -73,9 +73,9 @@ const router= createBrowserRouter([
                     //     element:<AdminServices/>
                     // },
                     {
-                        path:'insertTrain',
-                        element:<InsertTrain/>,
-                    },
+                        index: true, // This will render DefaultAdminPage when path is exactly /admin
+                        element: <InsertTrain/>, 
+                      },
                 ]
             },
             {
@@ -83,7 +83,7 @@ const router= createBrowserRouter([
                 element:<UpdateUser/>
             },
             {
-                path:'/payBill/:id',
+                path:'/payBill/:id/:total',
                 element:<PayBill/>
             }
         ]

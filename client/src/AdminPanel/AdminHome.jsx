@@ -21,14 +21,19 @@ const AdminHome = () => {
 
 
   return (
-    <div className='flex'>
-        <div className='bg-slate-400 p-10 h-screen'>
+    <div className='flex h-screen'>
+        <div className='bg-blue-400 p-4 h-screen'>
       <ul className='items-center justify-center '>
-        <NavLink to="/admin"><li className='flex'><FaHome />Home</li></NavLink>
-        <NavLink to="/admin/users"><li className='flex'> <FaUsers />Users</li></NavLink>
+        <NavLink to="/admin">
+        <button className='bg-orange-500 border w-[100%] rounded-md px-2 items-center text-center flex'>
+        <FaHome />Insert Train
+        </button>
+        </NavLink>
+
+        <NavLink to="/admin/users"><button className='bg-orange-500 border w-[100%] rounded-md px-2 items-center text-center flex'> <FaUsers />Users</button></NavLink>
         {/* <NavLink to="/admin/contacts"><li className='flex'><IoIosContacts />Contacts</li></NavLink> */}
         {/* <NavLink to="/admin/services"><li className='flex'><FcServices />Services</li></NavLink> */}
-        <NavLink to="/admin/insertTrain"><li className='flex'> <FaUsers />Insert Trains</li></NavLink>
+       
 
       </ul>
         

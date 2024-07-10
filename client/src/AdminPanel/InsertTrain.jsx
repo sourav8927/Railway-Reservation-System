@@ -50,7 +50,11 @@ const InsertTrain = () => {
 
   console.log(watch("example"));
   return (
-    <div className="  max-w-screen-2xl container mx-auto xl:px-24 px-4 my-20 ">
+    <div className="  max-w-screen-2xl container mx-auto xl:px-24 px-4 my-10  ">
+      <div className="text-center">
+      <h1 className="font-bold text-3xl mb-4 text-orange-500">Insert the Train</h1>
+
+      </div>
     {/* form */}
     <div className="bg-[#FAFAFA] py-10 px-4 lg:px-16 ">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

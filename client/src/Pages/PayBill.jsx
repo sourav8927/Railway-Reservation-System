@@ -1,14 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import PaymentSuccessDialog from '../Components/PaymentSuccessDialog';
+
 
 const PayBill = () => {
     const [bookingDetails, setbookingDetails] = useState([])
+    const [totalAmount, setTotalAmount] = useState(0);
   const [paymentDetails, setPaymentDetails] = useState({
     cardNumber: '',
     cardHolderName: '',
     expiryDate: '',
     cvv: '',
   });
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handlePaymentSuccess = () => {
+    // Simulate a payment success action
+    setDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,7 +34,7 @@ const PayBill = () => {
     });
   };
 
-  const {id}=useParams();
+  const {id,total}=useParams();
   const fetchTrainBookingData = async () => {
     const URL = `http://127.0.0.2:3000/api/trainBooking/getBookingTrainById/${id}`;
     const response = await fetch(URL, {
@@ -28,7 +44,8 @@ const PayBill = () => {
     const trainData = await response.json();
     console.log("booked train data",trainData);
     setbookingDetails(trainData);
-
+    setTotalAmount(total);
+    console.log(total)
     // if(response.ok){
     //   alert("trains fetched")
     // }
@@ -40,13 +57,14 @@ const PayBill = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle payment submission logic here
-    alert('Payment submitted successfully!');
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 ">
+      <div className='text-center'>
+
       <h2 className="text-2xl font-bold mb-4">Bill Payment</h2>
+      </div>
       <div className="border p-4 mb-4">
         <h3 className="font-bold">Booking Summary</h3>
         <div>
@@ -55,7 +73,7 @@ const PayBill = () => {
           <p>To: {bookingDetails.destination}</p>
           <p>Journey Date: {bookingDetails.journeyDate}</p>
           <p>Class: {bookingDetails.class}</p>
-          <p>Total Amount: ₹{bookingDetails.totalAmount}</p>
+          <p>Total Amount: ₹{totalAmount}</p>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
@@ -104,9 +122,17 @@ const PayBill = () => {
             </div>
           </div>
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        <div className='flex text-center items-center justify-center '>
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handlePaymentSuccess}>
           Pay Now
         </button>
+        <PaymentSuccessDialog open={dialogOpen} onClose={handleClose}/>
+        <h1 className='font-bold text-2xl ml-5 bg-orange-600 text-white px-2 py-1 rounded-sm'>
+        {totalAmount}!!
+
+        </h1>
+        </div>
+         
       </form>
     </div>
   );

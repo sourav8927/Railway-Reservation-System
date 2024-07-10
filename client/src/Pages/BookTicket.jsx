@@ -77,8 +77,8 @@ const  BookTicket= () => {
     const result = await response.json();
     setbookingDetails(result);
     if (response.ok) {
-      alert('Booking successful');
-      navigate(`/payBill/${result._id}`); // Navigate to the new page with booking ID
+      alert('Go to the next page');
+      navigate(`/payBill/${result._id}/${totalAmount}`); // Navigate to the new page with booking ID
     } else {
       alert('Booking failed: ' + result.message);
     }
