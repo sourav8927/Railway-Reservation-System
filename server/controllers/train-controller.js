@@ -51,9 +51,7 @@ const insertATrain= async(req,res)=>{
 };
 const getTrainById= async(req,res)=>{
     const id=req.params.id;
-    const train = await Trains.findOne({
-        _id: new ObjectId(id)
-    })
+    const train = await Trains.findById(new mongoose.Types.ObjectId(id));
 
     res.send(train);
 }

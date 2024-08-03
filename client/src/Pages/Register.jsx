@@ -4,7 +4,7 @@ import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { useAuth } from "../store/Auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import { FaEye ,FaEyeSlash } from "react-icons/fa";
 
@@ -67,17 +67,12 @@ const navigate= useNavigate();
   };
   return (
     <>
-      <section className=" h-screen ">
+      <section className="">
         <main>
-          <div className="section-registration ">
+          <div className="section-registration bg-transparent">
             <div className="container grid grid-two-cols ">
-              {/* for image part */}
-              <div className="registration-image">
-                <img src="" alt="" />
-              </div>
-
               {/* for registration form */}
-              <div className="registration-form  bg-slate-200 mt-20   md:w-[30vw]  m-auto rounded-2xl shadow-2xl">
+              <div className="registration-form  bg-slate-200 mt-10   md:w-[30vw]  m-auto rounded-2xl shadow-2xl">
                 <h1 className="main-heading text-center text-2xl font-bold text-blue-800  pt-10 pb-5">
                   Registration form
                 </h1>
@@ -86,7 +81,7 @@ const navigate= useNavigate();
                 <form
                   action=""
                   onSubmit={handleSubmit}
-                  className=" px-10 pb-10 "
+                  className=" px-10 pb-5 "
                 >
                   <div className="space-y-5 ">
                     {/* for username */}
@@ -101,7 +96,7 @@ const navigate= useNavigate();
                         <input
                           type="text"
                           name="username"
-                          placeholder="Ex: Rohan roy"
+                          placeholder="name"
                           id="username"
                           required
                           autoComplete="off"
@@ -122,7 +117,7 @@ const navigate= useNavigate();
                       <input
                         type="email"
                         name="email"
-                        placeholder="Ex: rohan123@gmail.com"
+                        placeholder="email address"
                         id="email"
                         required
                         autoComplete="off"
@@ -188,6 +183,10 @@ const navigate= useNavigate();
                     >
                       Register now
                     </button>
+                  </div>
+                  <div className="text-center p-2">
+                  <p>already registered ? <Link to="/login" className="hover:text-blue-500 text-gray-600">Login</Link> </p>
+
                   </div>
                 </form>
               </div>

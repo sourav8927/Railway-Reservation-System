@@ -165,7 +165,7 @@
 //                   <h1>{train.TrainName}</h1>
 //                   <div className="flex space-x-2 items-center">
 //                     <Link to={`/bookticket/${train._id}`}>
-//                     <button className="px-4 py-1 bg-orange-500 hover:bg-blue-700 rounded-lg text-white">Book now</button> 
+//                     <button className="px-4 py-1 bg-orange-500 hover:bg-blue-700 rounded-lg text-white">Book now</button>
 //                     </Link>
 //                     <span className="h-12 w-[3px] rounded-sm bg-black"></span>
 //                     <p className="flex  items-center">
@@ -187,7 +187,6 @@
 
 // export default Home;
 
-
 import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -197,13 +196,21 @@ import { IoMdSwap } from "react-icons/io";
 import { BiSolidTrain } from "react-icons/bi";
 import { FaSearch } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
+import { RxCross2 } from "react-icons/rx";
+import { useAuth } from "../store/Auth";
 
 const Home = () => {
+
   const [trains, setTrains] = useState([]);
   const [fromStation, setFromStation] = useState("");
   const [toStation, setToStation] = useState("");
   const { id } = useParams();
 
+  const { user, isLoading, token } = useAuth();
+  if (token && isLoading) {
+    return <h1>Loading...</h1>;
+  }
+  const { isLoggedIn } = useAuth();
   const fetchData = async (from = "", to = "") => {
     const URL = `http://127.0.0.2:3000/api/trainsRoutes/trains?from=${from}&to=${to}`;
     const response = await fetch(URL, {
@@ -232,7 +239,18 @@ const Home = () => {
     event.preventDefault();
     fetchData(fromStation, toStation);
   };
+  const handleSwap = () => {
+    setFromStation(toStation);
+    setToStation(fromStation);
+  };
 
+  const leftHandleCross=()=>{
+    setFromStation("");
+    
+  }
+  const rightHandleCross=()=>{
+    setToStation("");
+  }
   return (
     <div className="text-2xl max-w-screen-2xl container mx-auto xl:px-24 px-4 md:py-20 py-14 bg-gradient-to-r from-[#DEE4EA] to-[#F9FCFF]">
       <h1 className="text-center font-bold text-5xl mb-10 font-sans text-blue-700">
@@ -243,8 +261,8 @@ const Home = () => {
         <div className="bg-blue-400 shadow-lg rounded-lg mt-10 px-10 text-center items-center justify-center">
           <h1 className="text-white font-serif py-6 text-3xl">Search Train</h1>
           <form onSubmit={handleSearch}>
-            <div className="flex w-full grid-flow-row">
-              <div className="flex rounded-lg ring-1 ring-inset ring-gray-300 focus-within:right-2 focus-within:ring-inset focus-within:ring-indigo-600 md:w-1/2 w-full">
+            <div className="flex w-full grid-flow-row sm:grid-flow-col ">
+              <div className="flex rounded-lg ring-1 ring-inset bg-white ring-white focus-within:right-2 focus-within:ring-inset  md:w-1/2 w-full ">
                 <input
                   type="text"
                   name="fromStation"
@@ -254,11 +272,12 @@ const Home = () => {
                   value={fromStation}
                   onChange={handleInputChange}
                 />
+                <RxCross2 className=' mt-4 mr-2 text-gray-400'onClick={leftHandleCross}/>
               </div>
-              <div className="p-2">
+              <div className="p-2 cursor-pointer" onClick={handleSwap}>
                 <IoMdSwap className="size-10 text-white hover:text-blue-600" />
               </div>
-              <div className="flex rounded-lg ring-1 ring-inset ring-gray-300 focus-within:right-2 focus-within:ring-inset focus-within:ring-indigo-600 md:w-1/2 w-full">
+              <div className="flex border-none rounded-lg ring-1 ring-inset bg-white ring-white focus-within:right-2 focus-within:ring-inset  md:w-1/2 w-full ">
                 <input
                   type="text"
                   name="toStation"
@@ -268,6 +287,7 @@ const Home = () => {
                   value={toStation}
                   onChange={handleInputChange}
                 />
+                <RxCross2 className=' mt-4 mr-2 text-gray-400' onClick={rightHandleCross}/>
               </div>
             </div>
             <button
@@ -278,10 +298,10 @@ const Home = () => {
             </button>
           </form>
         </div>
-{/* Search trains */}
-         <form action="">
-           <div className="flex text-center justify-start md:flex-row flex-col md:gap-0 gap-4 mt-5">
-             {/*for search bar*/}
+        {/* Search trains */}
+        <form action="">
+          <div className="flex text-center justify-start md:flex-row flex-col md:gap-0 gap-4 mt-5">
+            {/*for search bar*/}
             <div
               className="flex md:rounded-s-sm rounded shadow-sm ring-1 ring-inset ring-gray-300
             focus-within:right-2 focus-within:ring-inset  w-[30%]  text-center "
@@ -305,16 +325,23 @@ const Home = () => {
             </div>
           </div>
         </form>
-        <div className="TrainsContainer my-4">
+        <div className="TrainsContainer my-4 overflow-y-scroll max-h-96">
           <h2 className="px-5">Available Trains</h2>
           {trains
             .filter(
               (train) =>
-                train.Source.toLowerCase().includes(fromStation.toLowerCase()) &&
-                train.Destination.toLowerCase().includes(toStation.toLowerCase())
+                train.Source.toLowerCase().includes(
+                  fromStation.toLowerCase()
+                ) &&
+                train.Destination.toLowerCase().includes(
+                  toStation.toLowerCase()
+                )
             )
             .map((train) => (
-              <div key={train._id} className="card bg-white rounded-2xl shadow-sm p-2">
+              <div
+                key={train._id}
+                className="card bg-white rounded-2xl shadow-sm p-2"
+              >
                 <div className="flex space-x-4">
                   <div className="bg-blue-500 text-white rounded-md px-2">
                     <p className="text-[20px]">{train.TrainNo}</p>
@@ -343,11 +370,18 @@ const Home = () => {
                 <div className="flex justify-between">
                   <h1>{train.TrainName}</h1>
                   <div className="flex space-x-2 items-center">
-                    <Link to={`/bookticket/${train._id}`}>
+                    {isLoggedIn ? (
+                      <Link to={`/bookticket/${train._id}`}>
                       <button className="px-4 py-1 bg-orange-500 hover:bg-blue-700 rounded-lg text-white">
                         Book now
                       </button>
                     </Link>
+                    ): (<Link to="/register">
+                      <button className="px-4 py-1 bg-orange-500 hover:bg-blue-700 rounded-lg text-white">
+                        Book now
+                      </button>
+                    </Link>)}
+                
                     <span className="h-12 w-[3px] rounded-sm bg-black"></span>
                     <p className="flex items-center">
                       <span>

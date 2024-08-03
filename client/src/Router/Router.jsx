@@ -14,6 +14,8 @@ import UpdateUser from "../AdminPanel/UpdateUser";
 import BookTicket from "../Pages/BookTicket";
 import PayBill from "../Pages/PayBill";
 import { createBrowserRouter } from "react-router-dom";
+// import FinalBill from "../Components/FinalBill";
+import BookingCancle from "../Components/BookingCancle";
 
 const router= createBrowserRouter([
     {
@@ -85,6 +87,14 @@ const router= createBrowserRouter([
             {
                 path:'/payBill/:id/:total',
                 element:<PayBill/>
+            },
+            // {
+            //     path:'/finalbill',
+            //     element:<FinalBill/>
+            // },
+            {
+                path:'/bookingcancle',
+                element:<BookingCancle/>
             }
         ]
        }

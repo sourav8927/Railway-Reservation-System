@@ -1,45 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams} from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { LuRefreshCw } from "react-icons/lu";
 
-
-const  BookTicket= () => {
+const BookTicket = () => {
   const [passengerDetails, setPassengerDetails] = useState([
     { name: '', age: '', gender: '', berthPreference: '', meal: '', senior: false },
   ]);
 
-  const [bookingDetails, setbookingDetails] = useState([])
+  const [bookingDetails, setbookingDetails] = useState([]);
   const [trainBooking, setTrainBooking] = useState([]);
   const [bookedTrain, setbookedTrain] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [captcha, setCaptcha] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
   const navigate = useNavigate(); 
+  const { id } = useParams();
 
-    const {id}=useParams();
-    const fetchTrainData = async () => {
-      const URL = `http://127.0.0.2:3000/api/trainsRoutes/booktrain/${id}`;
-      const response = await fetch(URL, {
-        method: "GET",
-      });
-  
-      const trainData = await response.json();
-      console.log(trainData);
-      setTrainBooking(trainData);
-      calculateTotalAmount(trainData, passengerDetails.length);
-      console.log(trainData.TicketFee)
-      // if(response.ok){
-      //   alert("trains fetched")
-      // }
-    };
-    useEffect(() => {
-      fetchTrainData();
-    }, []);
+  const fetchTrainData = async () => {
+    const URL = `http://127.0.0.2:3000/api/trainsRoutes/booktrain/${id}`;
+    const response = await fetch(URL, {
+      method: "GET",
+    });
+    const trainData = await response.json();
+    console.log(trainData);
+    setTrainBooking(trainData);
+    calculateTotalAmount(trainData, passengerDetails.length);
+    console.log(trainData.TicketFee);
+  };
 
-    const calculateTotalAmount = (trainData, numPassengers) => {
-      const {TicketFee} = trainData;
-      const total = TicketFee * numPassengers;
-      setTotalAmount(total);
-    };
-  
+  useEffect(() => {
+    fetchTrainData();
+  }, []);
+
+  const calculateTotalAmount = (trainData, numPassengers) => {
+    const { TicketFee } = trainData;
+    const total = TicketFee * numPassengers;
+    setTotalAmount(total);
+  };
+
   const handlePassengerChange = (index, field, value) => {
     const updatedPassengers = [...passengerDetails];
     updatedPassengers[index][field] = value;
@@ -52,9 +50,33 @@ const  BookTicket= () => {
       ...passengerDetails,
       { name: '', age: '', gender: '', berthPreference: '', meal: '', senior: false },
     ]);
-    calculateTotalAmount(trainBooking, updatedPassengers.length);
+    calculateTotalAmount(trainBooking, passengerDetails.length + 1);
   };
+
+  const validateForm = () => {
+    for (let i = 0; i < passengerDetails.length; i++) {
+      const passenger = passengerDetails[i];
+      if (!passenger.name || !passenger.age || !passenger.gender || !passenger.berthPreference || !passenger.meal) {
+        alert(`Please fill all details for passenger ${i + 1}`);
+        return false;
+      }
+    }
+    if (!captcha) {
+      alert('Please enter the captcha');
+      return false;
+    }
+    if (!mobileNumber) {
+      alert('Please enter your mobile number');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
     const bookingData = {
       trainNo: trainBooking.TrainNo,
       trainName: trainBooking.TrainName,
@@ -84,73 +106,52 @@ const  BookTicket= () => {
     }
   };
 
-  // const fetchTrainBookingData = async () => {
-  //   const URL = `http://127.0.0.2:3000/api/trainBooking/getBookingTrainById/${id}`;
-  //   const response = await fetch(URL, {
-  //     method: "GET",
-  //   });
-
-  //   const trainData = await response.json();
-  //   console.log(trainData);
-  //   setbookedTrain(trainData);
-
-  //   // if(response.ok){
-  //   //   alert("trains fetched")
-  //   // }
-  // };
-  // useEffect(() => {
-  //   fetchTrainBookingData();
-  // }, []);
-
-
   return (
     <div className="container mx-auto p-4">
-      <div className='text-center '>
-      <h2 className="text-2xl font-bold mb-4 text-orange-500 ">BOOK TICKET</h2>
-
+      <div className='text-center'>
+        <h2 className="text-2xl font-bold mb-4 text-orange-500">BOOK TICKET</h2>
       </div>
       {/* Journey Details */}
-      <div className="border  mb-4">
+      <div className="border mb-4">
         <div className='bg-blue-500 p-2'>
-           <h3 className="font-bold text-white">Journey Details</h3>
+          <h3 className="font-bold text-white">Journey Details</h3>
         </div>
-       <div className='p-6'>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className='flex'>
-            <label  className='font-semibold'>Train No./Name:</label>
-            <h2 className='text-gray-500'>{trainBooking.TrainNo}/{trainBooking.TrainName}</h2>
-          </div>
-          <div  className="flex">
-            <label className='font-semibold'>Journey Date:</label>
-            <h2 className='text-gray-500'>10/07/24</h2>
-          </div>
-          <div className="flex">
-            <label className='font-semibold'>From Station:</label>
-            <h2 className='text-gray-500'>{trainBooking.Source}</h2>
-          </div>
-          <div className="flex">
-            <label className='font-semibold'>To Station:</label>
-            <h2 className='text-gray-500'>{trainBooking.Destination}</h2>
-          </div>
-          <div className="flex">
-            <label className='font-semibold'>Boarding Station:</label>
-            <h2 className='text-gray-500'>None</h2>
-          </div>
-          <div className="flex">
-            <label className='font-semibold'>Reserve Upto Station:</label>
-            <h2 className='text-gray-500'>{trainBooking.Destination}</h2>
-          </div>
-          <div className="flex">
-            <label className='font-semibold'>Class:</label>
-            <h2 className='text-gray-500'>{trainBooking.ChooseFareClass}</h2>
-          </div>
-          <div className="flex">
-            <label className='font-semibold'>Quota:</label>
-            <h2 className='text-gray-500'>GENERAL</h2>
+        <div className='p-6'>
+          <div className="grid grid-cols-2 gap-4">
+            <div className='flex'>
+              <label className='font-semibold'>Train No./Name:</label>
+              <h2 className='text-gray-500'>{trainBooking.TrainNo}/{trainBooking.TrainName}</h2>
+            </div>
+            <div className="flex">
+              <label className='font-semibold'>Journey Date:</label>
+              <h2 className='text-gray-500'>10/07/24</h2>
+            </div>
+            <div className="flex">
+              <label className='font-semibold'>From Station:</label>
+              <h2 className='text-gray-500'>{trainBooking.Source}</h2>
+            </div>
+            <div className="flex">
+              <label className='font-semibold'>To Station:</label>
+              <h2 className='text-gray-500'>{trainBooking.Destination}</h2>
+            </div>
+            <div className="flex">
+              <label className='font-semibold'>Boarding Station:</label>
+              <h2 className='text-gray-500'>None</h2>
+            </div>
+            <div className="flex">
+              <label className='font-semibold'>Reserve Upto Station:</label>
+              <h2 className='text-gray-500'>{trainBooking.Destination}</h2>
+            </div>
+            <div className="flex">
+              <label className='font-semibold'>Class:</label>
+              <h2 className='text-gray-500'>{trainBooking.ChooseFareClass}</h2>
+            </div>
+            <div className="flex">
+              <label className='font-semibold'>Quota:</label>
+              <h2 className='text-gray-500'>GENERAL</h2>
+            </div>
           </div>
         </div>
-       </div>
       </div>
 
       {/* Passenger Details */}
@@ -228,13 +229,13 @@ const  BookTicket= () => {
         ))}
         <div className='justify-between flex text-center items-center'>
           <div>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={addPassenger}>
-          Add Passenger
-        </button>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={addPassenger}>
+              Add Passenger
+            </button>
           </div>
           <div className="text-center pt-2">
-        <h3 className="font-semibold text-2xl">Total Amount: ₹{totalAmount}</h3>
-      </div>
+            <h3 className="font-semibold text-2xl">Total Amount: ₹{totalAmount}</h3>
+          </div>
         </div>
       </div>
 
@@ -274,21 +275,28 @@ const  BookTicket= () => {
       <div className="border p-4 mb-4">
         <div className="flex items-center">
           <label>Captcha:</label>
-          <input type="text" className="border w-full p-2" />
-          <LuRefreshCw  className='m-2 size-8 text-orange-500'/>
-          <img src="../../public/images/226md.png" alt="" />
+          <input 
+            type="text" 
+            className="border w-full p-2" 
+            value={captcha}
+            onChange={(e) => setCaptcha(e.target.value)}
+          />
+          <LuRefreshCw className='m-2 size-8 text-orange-500' />
+          <img src="../../public/images/226md.png" alt="Captcha" />
         </div>
         <div className="flex items-center mt-4">
           <label>Mobile Number:</label>
-          <input type="text" className="border w-full p-2" />
+          <input 
+            type="text" 
+            className="border w-full p-2" 
+            value={mobileNumber}
+            onChange={(e) => setMobileNumber(e.target.value)}
+          />
         </div>
         <div className="flex justify-between mt-4">
-          
           <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSubmit}>Next</button>
-  
           <button className="bg-gray-500 text-white px-4 py-2 rounded">Replan</button>
         </div>
-      
       </div>
     </div>
   );

@@ -19,11 +19,11 @@ const Navbar = () => {
 
   const { isLoggedIn } = useAuth();
   return (
-    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 bg-blue-800 top-0">
-      <nav className="flex justify-between items-center py-6 text-white">
+    <div className="max-w-screen-2xl container mx-auto xl:px-10 px-4 bg-blue-800 top-0">
+      <nav className="flex justify-between items-center  text-white">
         {/* <img src="\public\images\jij_logo.webp" className='size-[50px]' alt="" /> */}
         <a href="/" className="flex items-center text-2xl">
-          BookMyTrain
+          <img src="../../public/images/TRAIN (1).svg" alt="" className="h-[80px] w-[150px]"/>
         </a>
         <ul className="hidden md:flex gap-12">
           <NavLink to="/">
@@ -41,11 +41,11 @@ const Navbar = () => {
           {user?.isAdmin && (
               <NavLink className={(e) => e.isActive ? "red" : ""} to="/admin"><li>Admin Dashboard</li></NavLink>
             )}
+        {/* google translater */}
+        <Translate />
   
         </ul>
 
-        {/* google translater */}
-        <Translate />
 
         {/* //login and registration and logout button  */}
         <div className="text-base font-medium space-x-5 hidden lg:block">

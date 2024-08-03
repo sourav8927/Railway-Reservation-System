@@ -9,4 +9,5 @@ router.route("/contacts").get(authmiddleware,adminMiddleware,adminController.get
 router.route("/users/delete/:id").delete(authmiddleware,adminMiddleware,adminController.deleteUser);
 router.route("/users/:id").get(authmiddleware,adminMiddleware,adminController.getUserById);
 router.route("/users/update/:id").patch(authmiddleware,adminMiddleware,adminController.updateUser);
+router.route("/train/delete/:id").delete(authmiddleware,adminMiddleware,adminController.deleteTrain);
 module.exports=router;

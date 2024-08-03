@@ -83,4 +83,19 @@ const updateUser= async(req,res,next)=>{
         next(error);
     }
 }
-module.exports={getAllUsers,getAllContacts,deleteUser,getUserById,updateUser};
+const deleteTrain= async(req,res,next)=>{
+    const id= req.params.id;
+    let user;
+    try {
+        user= await User.findByIdAndDelete(id);
+        if(!user){
+            res.status(404).json({message:" user doesnt exists"});
+        }
+        console.log(id);
+        res.status(200).json({message: "user deleted successfully"});
+    } catch (error) {
+        console.log("no user found");
+       next(error);
+    }
+}
+module.exports={getAllUsers,getAllContacts,deleteUser,getUserById,updateUser,deleteTrain};
