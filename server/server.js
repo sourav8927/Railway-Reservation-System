@@ -26,11 +26,11 @@ app.use("/api/trainBooking",bookTrain);
 app.use(errorMiddleware);
 
 const PORT=process.env.PORT || 3000;
-const hostname='127.0.0.2';
+
 
 connectDb().then(()=>{
-    app.listen(PORT,hostname,()=>{
-        console.log(`Server is running at http://${hostname}:${PORT}/`);
+    app.listen(PORT,()=>{
+        console.log(`Server is running at port:${PORT}`);
     });
 
 });
