@@ -25,7 +25,7 @@ app.use("/api/trainBooking",bookTrain);
 //calling error middleware
 app.use(errorMiddleware);
 
-const PORT=3000;
+const PORT=process.env.PORT || 3000;
 const hostname='127.0.0.2';
 
 connectDb().then(()=>{
